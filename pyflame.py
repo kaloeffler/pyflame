@@ -44,7 +44,7 @@ def flame_clustering(
     # unpack the data to [N, K] where K is the number of clusters
     fuzzy_labels = [
         pyfl.ffi.unpack(elem, flame.cso_count)
-        for elem in pyfl.ffi.unpack(flame.fuzzyships, N)
+        for elem in pyfl.ffi.unpack(flame.fuzzyships, n)
     ]
     fuzzy_labels = np.stack(fuzzy_labels)
 
