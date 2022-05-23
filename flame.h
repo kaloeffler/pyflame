@@ -138,7 +138,7 @@ struct Flame
 };
 
 /* Create a structure for FLAME clustering, and set all fields to zero. */
-Flame* Flame_New();
+Flame* Flame_New(void);
 
 /* Free allocated memory, and set all fields to zero. */
 void Flame_Clear( Flame *self );
@@ -181,6 +181,9 @@ void Flame_LocalApproximation( Flame *self, int steps, float epsilon );
  *   each object is assigned to the group (clusters/outlier group)
  *   in which it has the highest membership. */
 void Flame_MakeClusters( Flame *self, float thd );
+
+int * Flame_Clustering(float *data[], int labels[], int N, int M, int knn, float thd, int steps, float epsilon, float cluster_assign_thd);
+ /*N num rows M num columns; each row is considered as a latent vector*/
 
 
 #endif

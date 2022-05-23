@@ -1,6 +1,7 @@
 
-#include<flame.h>
-#include<stdio.h>
+#include "flame.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 int main( int argc, char *argv[] )
 {
@@ -22,6 +23,7 @@ int main( int argc, char *argv[] )
     data[i] = malloc( M * sizeof(float) );
     for( j=0; j<M; j++ ) fscanf( fin, "%f ", & data[i][j] );
   }
+  /*
   flame = Flame_New();
   Flame_SetDataMatrix( flame, data, N, M, 0 );
 
@@ -54,5 +56,16 @@ int main( int argc, char *argv[] )
     }
     printf( "\n" );
   }
+*/
+int labels[N];
+int knn = 10;
+float thd = -2.0;
+int steps = 500;  
+float epsilon = 1e-6;
+float clustr_thr = -1.0;
+int * la = Flame_Clustering(data, labels, N, M, knn, thd, steps, epsilon, clustr_thr);
+for (int l=0; l<N; l++){
+  printf("%i %i \n",l, la[l]);
+  fflush(stdout);}
   return 0;
 }

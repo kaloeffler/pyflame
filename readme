@@ -1,3 +1,12 @@
 To compile:
 
-gcc -I. flame.c sample.c -o sample
+gcc flame.c sample.c -lm -o sample
+
+
+1) set up the conda env
+conda env create -f requirements.yml
+conda activate venv_flame_clustering
+
+2) build the python bindings by running tasks.py
+
+3) 

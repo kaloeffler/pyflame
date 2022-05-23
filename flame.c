@@ -28,12 +28,12 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ===================================================================*/
 
-#include"stdio.h"
-#include"stdlib.h"
-#include"string.h"
-#include"math.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
 
-#include"flame.h"
+#include "flame.h"
 
 /* Quick Sort.
  * Adam Drozdek: Data Structures and Algorithms in C++, 2nd Edition.
@@ -255,7 +255,7 @@ void Flame_Clear( Flame *self )
 /* If m==0, data is distance matrix. */
 void Flame_SetMatrix( Flame *self, float *data[], int n, int m )
 {
-	int i, j, k;
+	int i, j;
 	int MAX = sqrt( n ) + 10;
 	IndexFloat *vals = (IndexFloat*) calloc( n, sizeof(IndexFloat) );
 	if( MAX >= n ) MAX = n - 1;
@@ -532,3 +532,44 @@ void Flame_MakeClusters( Flame *self, float thd )
 	free( vals );
 }
 
+int * Flame_Clustering(float *data[], int labels[], int N, int M, int knn, float thd, int steps, float epsilon, float cluster_assign_thd)
+{	
+	fflush( stdout );
+	Flame* flame;
+	flame = Flame_New();
+	printf( "Set data matrix..." );
+	fflush( stdout );
+	Flame_SetDataMatrix(flame, data, N, M, 0);
+	printf( "done \n");
+
+	
+	printf( "Detecting Cluster Supporting Objects ..." );
+	fflush( stdout );
+	Flame_DefineSupports(flame, knn, thd);
+	printf( "done, found %i\n", flame->cso_count );
+
+	printf( "Propagating fuzzy memberships ... " );
+	fflush( stdout );
+	Flame_LocalApproximation(flame, steps, epsilon);
+	printf( "done\n" );
+
+	printf( "Defining clusters from fuzzy memberships ... " );
+	fflush( stdout );
+	Flame_MakeClusters(flame, cluster_assign_thd);
+	printf( "done\n" );
+
+
+	/*In flame->clusters there will be K classes and per class the row ids that have been
+	assigned to the class*/
+	
+	int i,j;
+	for( i=0; i<=flame->cso_count; i++){
+		for( j=0; j<flame->clusters[i].size; j++){
+			if( i == flame->cso_count )
+				labels[flame->clusters[i].array[j]] = -1;
+			else
+				labels[flame->clusters[i].array[j]] = i;
+	}
+	}
+return labels;
+}
