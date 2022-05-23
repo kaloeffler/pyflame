@@ -532,11 +532,9 @@ void Flame_MakeClusters( Flame *self, float thd )
 	free( vals );
 }
 
-int * Flame_Clustering(float *data[], int labels[], int N, int M, int knn, float thd, int steps, float epsilon, float cluster_assign_thd)
+Flame* Flame_Clustering(Flame *flame, float *data[], int N, int M, int knn, float thd, int steps, float epsilon)
 {	
-	fflush( stdout );
-	Flame* flame;
-	flame = Flame_New();
+	/*flame = Flame_New();*/
 	printf( "Set data matrix..." );
 	fflush( stdout );
 	Flame_SetDataMatrix(flame, data, N, M, 0);
@@ -553,23 +551,10 @@ int * Flame_Clustering(float *data[], int labels[], int N, int M, int knn, float
 	Flame_LocalApproximation(flame, steps, epsilon);
 	printf( "done\n" );
 
-	printf( "Defining clusters from fuzzy memberships ... " );
+	/*printf( "Defining clusters from fuzzy memberships ... " );
 	fflush( stdout );
 	Flame_MakeClusters(flame, cluster_assign_thd);
-	printf( "done\n" );
-
-
-	/*In flame->clusters there will be K classes and per class the row ids that have been
-	assigned to the class*/
+	printf( "done\n" );*/
 	
-	int i,j;
-	for( i=0; i<=flame->cso_count; i++){
-		for( j=0; j<flame->clusters[i].size; j++){
-			if( i == flame->cso_count )
-				labels[flame->clusters[i].array[j]] = -1;
-			else
-				labels[flame->clusters[i].array[j]] = i;
-	}
-	}
-return labels;
+return flame;
 }
