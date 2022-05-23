@@ -1,5 +1,6 @@
 import cffi
 from pathlib import Path
+
 print("Building CFFI Module")
 
 current_dir = Path().absolute()
@@ -7,7 +8,8 @@ header_file = current_dir / "flame.h"
 
 ffi = cffi.FFI()
 
-ffi.cdef("""typedef struct Flame Flame;
+ffi.cdef(
+    """typedef struct Flame Flame;
 typedef struct IntArray IntArray;
 typedef float (*DistFunction)( float *x, float *y, int m );
 struct Flame
@@ -51,7 +53,8 @@ struct Flame
 	DistFunction distfunc;
 };
 Flame* Flame_New(void);
-Flame *Flame_Clustering(Flame *flame, float *data[], int N, int M, int knn, float thd, int steps, float epsilon);""")
+Flame *Flame_Clustering(Flame *flame, float *data[], int N, int M, int knn, float thd, int steps, float epsilon);"""
+)
 
 ffi.set_source(
     "__pyflame",
@@ -64,11 +67,10 @@ ffi.set_source(
     """,
     # The important thing is to include the pre-built lib in the list of
     # libraries you're linking against:
-    sources = ["flame.c"],
+    sources=["flame.c"],
     libraries=["m"],
     library_dirs=[current_dir.as_posix()],
     extra_link_args=["-Wl,-rpath,."],
 )
 
 ffi.compile(verbose=True)
-

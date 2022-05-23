@@ -1,7 +1,16 @@
 import __pyflame as pyfl
 import numpy as np
 
-def flame_clustering(data: np.array, knn: int = 10, thd: float = -2.0, steps: int = 500, epsilon: float = 1e-6, fuzzy_clusters: bool = True, min_membership_thr: float = 0.5):
+
+def flame_clustering(
+    data: np.array,
+    knn: int = 10,
+    thd: float = -2.0,
+    steps: int = 500,
+    epsilon: float = 1e-6,
+    fuzzy_clusters: bool = True,
+    min_membership_thr: float = 0.5,
+):
     """Python bindings to the FLAME clustering algorithm implemented in C.
     The orignial C code was implemented by Fu Limin and is available at https://github.com/zjroth/flame-clustering
 
@@ -16,7 +25,7 @@ def flame_clustering(data: np.array, knn: int = 10, thd: float = -2.0, steps: in
         min_membership_thr (float, optional): if fuzzy_clusters is False samples with a max membership score below this threshold will be assigned to the outlier class (-1). Defaults to 0.5
     """
     # allocates the specified C type and returns a pointer to it
-    n,m = data.shape
+    n, m = data.shape
     # allocates the specified C type and returns a pointer to it
     flame = pyfl.ffi.new(f"Flame*")
     flame = pyfl.lib.Flame_New()
@@ -32,9 +41,11 @@ def flame_clustering(data: np.array, knn: int = 10, thd: float = -2.0, steps: in
     pp = pyfl.ffi.cast("float **", d_pointers)
     flame = pyfl.lib.Flame_Clustering(flame, pp, n, m, knn, thd, steps, epsilon)
 
-
     # unpack the data to [N, K] where K is the number of clusters
-    fuzzy_labels = [pyfl.ffi.unpack(elem, flame.cso_count) for elem in pyfl.ffi.unpack(flame.fuzzyships, N)]
+    fuzzy_labels = [
+        pyfl.ffi.unpack(elem, flame.cso_count)
+        for elem in pyfl.ffi.unpack(flame.fuzzyships, N)
+    ]
     fuzzy_labels = np.stack(fuzzy_labels)
 
     if not fuzzy_clusters:
@@ -58,12 +69,16 @@ if __name__ == "__main__":
 
         for i, line in enumerate(file.readlines()):
             row = [float(elem) for elem in line.lstrip("\n").split(" ")]
-            data[i,:] = row
+            data[i, :] = row
     # fuzzy labels
-    fuzzy_labels = flame_clustering(data, knn, thd, steps, epsilon, fuzzy_clusters=True, min_membership_thr=None)
+    fuzzy_labels = flame_clustering(
+        data, knn, thd, steps, epsilon, fuzzy_clusters=True, min_membership_thr=None
+    )
     print("Fuzzy labels:")
     print(fuzzy_labels[:10])
     # discrete labels
-    labels = flame_clustering(data, knn, thd, steps, epsilon, fuzzy_clusters=False, min_membership_thr=0.5)
+    labels = flame_clustering(
+        data, knn, thd, steps, epsilon, fuzzy_clusters=False, min_membership_thr=0.5
+    )
     print("Discrete labels:")
     print(labels[:10])
