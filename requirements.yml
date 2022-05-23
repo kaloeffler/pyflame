@@ -1,0 +1,10 @@
+name: venv_flame_clustering
+channels:
+  - pytorch
+  - defaults
+  - anaconda
+dependencies:
+  - python=3.7
+  - pip
+  - numpy
+  - cffi
