@@ -532,6 +532,7 @@ void Flame_MakeClusters( Flame *self, float thd )
 	free( vals );
 }
 
+/* Code added by Katharina Löffler */
 Flame* Flame_Clustering(Flame *flame, float *data[], int N, int M, int knn, float thd, int steps, float epsilon)
 {	
 	/*flame = Flame_New();*/
@@ -550,11 +551,6 @@ Flame* Flame_Clustering(Flame *flame, float *data[], int N, int M, int knn, floa
 	fflush( stdout );
 	Flame_LocalApproximation(flame, steps, epsilon);
 	printf( "done\n" );
-
-	/*printf( "Defining clusters from fuzzy memberships ... " );
-	fflush( stdout );
-	Flame_MakeClusters(flame, cluster_assign_thd);
-	printf( "done\n" );*/
 	
 return flame;
 }

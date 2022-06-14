@@ -182,6 +182,8 @@ void Flame_LocalApproximation( Flame *self, int steps, float epsilon );
  *   in which it has the highest membership. */
 void Flame_MakeClusters( Flame *self, float thd );
 
+
+/* Code added by Katharina Löffler*/
 Flame * Flame_Clustering(Flame *flame, float *data[], int N, int M, int knn, float thd, int steps, float epsilon);
  /*N num rows M num columns; each row is considered as a latent vector*/
 
